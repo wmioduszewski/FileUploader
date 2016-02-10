@@ -1,0 +1,42 @@
+﻿@model FileUploader.WebApp.Models.FileStatisticsEntity
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>FileStatisticsEntity</h4>
+    <hr/>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Filename)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Filename)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WordsCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WordsCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LinesCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LinesCount)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new {id = Model.ID}) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
