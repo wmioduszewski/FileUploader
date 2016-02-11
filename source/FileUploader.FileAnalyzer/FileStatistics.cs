@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FileUploader.FileAnalyzer
+﻿namespace FileUploader.FileAnalyzer
 {
     public class FileStatistics
     {
@@ -12,5 +6,10 @@ namespace FileUploader.FileAnalyzer
         public int WordCount { get; set; }
         public int LinesCount { get; set; }
         public int ContentLength { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0} - {1} words, {2} lines", Filename, WordCount, LinesCount);
+        }
     }
 }

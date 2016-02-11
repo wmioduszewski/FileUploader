@@ -1,22 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace FileUploader.FileAnalyzer
 {
     internal class FileStatisticsProducer : StatisticsProducerBase
     {
-
-        internal override void GetStatistics(HttpPostedFileBase file)
+        internal override FileStatistics GetStatistics(HttpPostedFileBase file)
         {
-
+            StreamProcessorBase streamProcessor = null;
             switch (file.ContentType)
             {
+                case "text/plain":
+                    streamProcessor = new TextProcessor();
+                    break;
             }
+
+            if (streamProcessor == null)
+            {
+                throw new Exception("Unhandled file type posted");
+            }
+
+            return streamProcessor.ComputeStatistics(file);
         }
     }
 }

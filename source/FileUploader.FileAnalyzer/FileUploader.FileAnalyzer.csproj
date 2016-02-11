@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileAnalyzerClient.cs" />
     <Compile Include="FileStatistics.cs" />
     <Compile Include="FileStatisticsProducer.cs" />
     <Compile Include="StatisticsProducerBase.cs" />

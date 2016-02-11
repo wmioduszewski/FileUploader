@@ -10,6 +10,6 @@ namespace FileUploader.FileAnalyzer
 {
     internal abstract class StatisticsProducerBase
     {
-        internal abstract void GetStatistics(HttpPostedFileBase file);
+        internal abstract FileStatistics GetStatistics(HttpPostedFileBase file);
     }
 }
