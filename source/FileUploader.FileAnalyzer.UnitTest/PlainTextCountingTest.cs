@@ -45,7 +45,7 @@ namespace FileUploader.FileAnalyzer.UnitTest
         private static FileStatistics GetTestFileStatistics(string testFilePath)
         {
             var input = File.ReadAllText(testFilePath);
-            int words = Regex.Matches(input, @"\b\w+\b").Count;
+            int words = Regex.Matches(input, @"[\S]+").Count;
             int lines = Regex.Matches(input, Environment.NewLine).Count;
             FileStatistics fileStatistics = new FileStatistics
             {
