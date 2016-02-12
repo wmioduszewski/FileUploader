@@ -30,7 +30,7 @@ namespace FileUploader.FileAnalyzer
 
             FileStatistics fileStatistics = new FileStatistics
             {
-                WordCount = wordCount,
+                WordsCount = wordCount,
                 LinesCount = linesCount,
                 Filename = httpPostedFileBase.FileName
             };

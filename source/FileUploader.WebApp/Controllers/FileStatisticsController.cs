@@ -1,7 +1,10 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
+using FileUploader.FileAnalyzer;
 using FileUploader.WebApp.DAL;
 using FileUploader.WebApp.Models;
 
@@ -9,12 +12,13 @@ namespace FileUploader.WebApp.Controllers
 {
     public class FileStatisticsController : Controller
     {
-        private StatisticsContext db = new StatisticsContext();
+        private readonly StatisticsContext _db = new StatisticsContext();
+        private readonly FileAnalyzerClient _fileAnalyzerClient = new FileAnalyzerClient();
 
         // GET: FileStatistics
         public ActionResult Index()
         {
-            return View(db.FileStatisticsEntities.ToList());
+            return View(_db.FileStatisticsEntities.ToList());
         }
 
         // GET: FileStatistics/Details/5
@@ -24,7 +28,7 @@ namespace FileUploader.WebApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            FileStatisticsEntity fileStatisticsEntity = db.FileStatisticsEntities.Find(id);
+            FileStatisticsEntity fileStatisticsEntity = _db.FileStatisticsEntities.Find(id);
             if (fileStatisticsEntity == null)
             {
                 return HttpNotFound();
@@ -43,17 +47,29 @@ namespace FileUploader.WebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(
-            [Bind(Include = "ID,Filename,WordsCount,LinesCount")] FileStatisticsEntity fileStatisticsEntity)
+        public ActionResult Create(HttpPostedFileBase upload)
         {
             if (ModelState.IsValid)
             {
-                db.FileStatisticsEntities.Add(fileStatisticsEntity);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (upload != null && upload.ContentLength > 0)
+                {
+                    try
+                    {
+                        var stats = _fileAnalyzerClient.ComputeStatistics(upload);
+                        var fileStatisticsEntity = new FileStatisticsEntity(stats);
+                        _db.FileStatisticsEntities.Add(fileStatisticsEntity);
+                        _db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    catch (Exception)
+                    {
+                        //todo: redirect to error
+                        //return RedirectToAction("");
+                    }
+                    
+                }
             }
-
-            return View(fileStatisticsEntity);
+            return View();
         }
 
         // GET: FileStatistics/Edit/5
@@ -63,7 +79,7 @@ namespace FileUploader.WebApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            FileStatisticsEntity fileStatisticsEntity = db.FileStatisticsEntities.Find(id);
+            FileStatisticsEntity fileStatisticsEntity = _db.FileStatisticsEntities.Find(id);
             if (fileStatisticsEntity == null)
             {
                 return HttpNotFound();
@@ -81,8 +97,8 @@ namespace FileUploader.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(fileStatisticsEntity).State = EntityState.Modified;
-                db.SaveChanges();
+                _db.Entry(fileStatisticsEntity).State = EntityState.Modified;
+                _db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(fileStatisticsEntity);
@@ -95,7 +111,7 @@ namespace FileUploader.WebApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            FileStatisticsEntity fileStatisticsEntity = db.FileStatisticsEntities.Find(id);
+            FileStatisticsEntity fileStatisticsEntity = _db.FileStatisticsEntities.Find(id);
             if (fileStatisticsEntity == null)
             {
                 return HttpNotFound();
@@ -108,9 +124,9 @@ namespace FileUploader.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            FileStatisticsEntity fileStatisticsEntity = db.FileStatisticsEntities.Find(id);
-            db.FileStatisticsEntities.Remove(fileStatisticsEntity);
-            db.SaveChanges();
+            FileStatisticsEntity fileStatisticsEntity = _db.FileStatisticsEntities.Find(id);
+            _db.FileStatisticsEntities.Remove(fileStatisticsEntity);
+            _db.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -118,7 +134,7 @@ namespace FileUploader.WebApp.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }

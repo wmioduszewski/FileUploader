@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
+using FileUploader.FileAnalyzer;
 using FileUploader.WebApp.Models;
 
 namespace FileUploader.WebApp.DAL
@@ -10,11 +11,11 @@ namespace FileUploader.WebApp.DAL
         {
             var files = new List<FileStatisticsEntity>
             {
-                new FileStatisticsEntity {Filename = "a.txt", LinesCount = 5, WordsCount = 10},
-                new FileStatisticsEntity {Filename = "b.txt", LinesCount = 6, WordsCount = 40},
-                new FileStatisticsEntity {Filename = "c.txt", LinesCount = 7, WordsCount = 20},
-                new FileStatisticsEntity {Filename = "d.txt", LinesCount = 58, WordsCount = 100},
-                new FileStatisticsEntity {Filename = "e.txt", LinesCount = 9, WordsCount = 0}
+                new FileStatisticsEntity(new FileStatistics {Filename = "a.txt", LinesCount = 5, WordsCount = 10}),
+                new FileStatisticsEntity(new FileStatistics {Filename = "b.txt", LinesCount = 6, WordsCount = 40}),
+                new FileStatisticsEntity(new FileStatistics {Filename = "c.txt", LinesCount = 7, WordsCount = 20}),
+                new FileStatisticsEntity(new FileStatistics {Filename = "d.txt", LinesCount = 58, WordsCount = 100}),
+                new FileStatisticsEntity(new FileStatistics {Filename = "e.txt", LinesCount = 9, WordsCount = 0})
             };
 
             files.ForEach(x => context.FileStatisticsEntities.Add(x));

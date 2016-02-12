@@ -26,7 +26,7 @@ namespace FileUploader.FileAnalyzer.UnitTest
             {
                 var productionFileStatistics = GetProductionFileStatistics(testFile);
                 var testFileStatistics = GetTestFileStatistics(testFile);
-                Assert.AreEqual(productionFileStatistics.WordCount, testFileStatistics.WordCount);
+                Assert.AreEqual(productionFileStatistics.WordsCount, testFileStatistics.WordsCount);
                 Assert.AreEqual(productionFileStatistics.LinesCount, testFileStatistics.LinesCount);
             }
         }
@@ -50,7 +50,7 @@ namespace FileUploader.FileAnalyzer.UnitTest
             FileStatistics fileStatistics = new FileStatistics
             {
                 LinesCount = lines,
-                WordCount = words,
+                WordsCount = words,
                 Filename = testFilePath
             };
             return fileStatistics;

@@ -181,6 +181,12 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FileUploader.FileAnalyzer\FileUploader.FileAnalyzer.csproj">
+      <Project>{363C0676-5FD3-4DED-A7D2-E2226710A6D1}</Project>
+      <Name>FileUploader.FileAnalyzer</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
