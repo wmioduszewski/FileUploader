@@ -66,7 +66,6 @@ namespace FileUploader.WebApp.Controllers
                         //todo: redirect to error
                         //return RedirectToAction("");
                     }
-                    
                 }
             }
             return View();
@@ -93,15 +92,22 @@ namespace FileUploader.WebApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(
-            [Bind(Include = "ID,Filename,WordsCount,LinesCount")] FileStatisticsEntity fileStatisticsEntity)
+            [Bind(Include = "ID")] FileStatisticsEntity fileStatisticsEntity, HttpPostedFileBase upload)
         {
             if (ModelState.IsValid)
             {
-                _db.Entry(fileStatisticsEntity).State = EntityState.Modified;
+                if (fileStatisticsEntity == null)
+                {
+                    return HttpNotFound();
+                }
+
+                var stats = _fileAnalyzerClient.ComputeStatistics(upload);
+                var newFileStatisticsEntity = new FileStatisticsEntity(stats) {ID = fileStatisticsEntity.ID};
+                _db.Entry(newFileStatisticsEntity).State = EntityState.Modified;
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(fileStatisticsEntity);
+            return View();
         }
 
         // GET: FileStatistics/Delete/5
