@@ -18,7 +18,8 @@ namespace FileUploader.WebApp.Controllers
         // GET: FileStatistics
         public ActionResult Index()
         {
-            return View(_db.FileStatisticsEntities.ToList());
+            var fileStatistics = _db.FileStatisticsEntities.OrderByDescending(x=>x.WordsCount);
+            return View(fileStatistics.ToList());
         }
 
         // GET: FileStatistics/Details/5
