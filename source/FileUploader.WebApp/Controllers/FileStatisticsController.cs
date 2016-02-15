@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -14,11 +16,12 @@ namespace FileUploader.WebApp.Controllers
     {
         private readonly StatisticsContext _db = new StatisticsContext();
         private readonly FileAnalyzerClient _fileAnalyzerClient = new FileAnalyzerClient();
+        private readonly string modalErrorKey = "FileUpload";
 
         // GET: FileStatistics
         public ActionResult Index()
         {
-            var fileStatistics = _db.FileStatisticsEntities.OrderByDescending(x=>x.WordsCount);
+            var fileStatistics = _db.FileStatisticsEntities.OrderByDescending(x => x.WordsCount);
             return View(fileStatistics.ToList());
         }
 
@@ -50,6 +53,7 @@ namespace FileUploader.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(HttpPostedFileBase upload)
         {
+            ValidateUploadedFile(upload);
             if (ModelState.IsValid)
             {
                 if (upload != null && upload.ContentLength > 0)
@@ -62,14 +66,34 @@ namespace FileUploader.WebApp.Controllers
                         _db.SaveChanges();
                         return RedirectToAction("Index");
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        //todo: redirect to error
-                        //return RedirectToAction("");
+                        ModelState.AddModelError(modalErrorKey, string.Format("Unexpected exception {0}", ex.Message));
                     }
                 }
             }
             return View();
+        }
+
+        private void ValidateUploadedFile(HttpPostedFileBase httpPostedFileBase)
+        {
+            if (httpPostedFileBase == null)
+            {
+                ModelState.AddModelError(modalErrorKey, "This field is required");
+                return;
+            }
+
+            if (httpPostedFileBase.ContentLength > MvcApplication.MaxRequestLengthInKB * 1024)
+            {
+                ModelState.AddModelError(modalErrorKey, "Chosen file is too large.");
+                return;
+            }
+
+            var extension = Path.GetExtension(httpPostedFileBase.FileName);
+            if (extension == null || !_fileAnalyzerClient.SupportedExtensions.Contains(extension.ToLower()))
+            {
+                ModelState.AddModelError(modalErrorKey, "Please choose handled file extension.");
+            }
         }
 
         // GET: FileStatistics/Edit/5
@@ -102,6 +126,7 @@ namespace FileUploader.WebApp.Controllers
                     return HttpNotFound();
                 }
 
+                ValidateUploadedFile(upload);
                 var stats = _fileAnalyzerClient.ComputeStatistics(upload);
                 var newFileStatisticsEntity = new FileStatisticsEntity(stats) {ID = fileStatisticsEntity.ID};
                 _db.Entry(newFileStatisticsEntity).State = EntityState.Modified;
