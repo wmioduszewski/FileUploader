@@ -22,7 +22,7 @@ namespace FileUploader.WebApp.Controllers
         public ActionResult Index()
         {
             var fileStatistics = _db.FileStatisticsEntities.OrderByDescending(x => x.WordsCount);
-            return View(fileStatistics.ToList());
+            return View(fileStatistics.ToList());            
         }
 
         // GET: FileStatistics/Details/5

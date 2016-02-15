@@ -24,7 +24,8 @@ namespace FileUploader.FileAnalyzer.UnitTest
 
             foreach (var testFile in fileList)
             {
-                var productionFileStatistics = GetProductionFileStatistics(testFile);
+                var httpInput = Utils.PrepareFakeWebInput(new FileInfo(testFile));
+                var productionFileStatistics = Utils.GetProductionStatistics(httpInput);
                 var testFileStatistics = GetTestFileStatistics(testFile);
                 Assert.AreEqual(productionFileStatistics.WordsCount, testFileStatistics.WordsCount);
                 Assert.AreEqual(productionFileStatistics.LinesCount, testFileStatistics.LinesCount);
@@ -59,7 +60,7 @@ namespace FileUploader.FileAnalyzer.UnitTest
         private FileStatistics GetProductionFileStatistics(string testFilePath)
         {
             var filePath = new FileInfo(testFilePath);
-            var fakeHttpInput = Utils.PrepareFakeWebInput(filePath, filePath);
+            var fakeHttpInput = Utils.PrepareFakeWebInput(filePath);
             FileAnalyzerClient fileAnalyzerClient = new FileAnalyzerClient();
             var statistics = fileAnalyzerClient.ComputeStatistics(fakeHttpInput);
             fakeHttpInput.InputStream.Close();
