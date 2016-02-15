@@ -8,8 +8,8 @@ namespace FileUploader.FileAnalyzer
 {
     internal class FileStatisticsProducer : StatisticsProducerBase
     {
-        internal IList<String> SupportedExtensions = new List<string>();
         private readonly IList<StreamProcessorBase> _subscribedProcessors;
+        internal IList<String> SupportedExtensions = new List<string>();
 
         public FileStatisticsProducer()
         {

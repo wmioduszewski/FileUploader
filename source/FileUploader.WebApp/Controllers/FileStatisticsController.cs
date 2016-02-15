@@ -21,7 +21,7 @@ namespace FileUploader.WebApp.Controllers
         public ActionResult Index()
         {
             var fileStatistics = _db.FileStatisticsEntities.OrderByDescending(x => x.WordsCount);
-            return View(fileStatistics.ToList());            
+            return View(fileStatistics.ToList());
         }
 
         // GET: FileStatistics/Details/5
@@ -74,27 +74,6 @@ namespace FileUploader.WebApp.Controllers
             return View();
         }
 
-        private void ValidateUploadedFile(HttpPostedFileBase httpPostedFileBase)
-        {
-            if (httpPostedFileBase == null)
-            {
-                ModelState.AddModelError(modalErrorKey, "This field is required");
-                return;
-            }
-
-            if (httpPostedFileBase.ContentLength > MvcApplication.MaxRequestLengthInKB * 1024)
-            {
-                ModelState.AddModelError(modalErrorKey, "Chosen file is too large.");
-                return;
-            }
-
-            var extension = Path.GetExtension(httpPostedFileBase.FileName);
-            if (extension == null || !_fileAnalyzerClient.SupportedExtensions.Contains(extension.ToLower()))
-            {
-                ModelState.AddModelError(modalErrorKey, "Please choose handled file extension.");
-            }
-        }
-
         // GET: FileStatistics/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -131,7 +110,7 @@ namespace FileUploader.WebApp.Controllers
                     try
                     {
                         var stats = _fileAnalyzerClient.ComputeStatistics(upload);
-                        var newFileStatisticsEntity = new FileStatisticsEntity(stats) { ID = fileStatisticsEntity.ID };
+                        var newFileStatisticsEntity = new FileStatisticsEntity(stats) {ID = fileStatisticsEntity.ID};
                         _db.Entry(newFileStatisticsEntity).State = EntityState.Modified;
                         _db.SaveChanges();
                         return RedirectToAction("Index");
@@ -178,6 +157,27 @@ namespace FileUploader.WebApp.Controllers
                 _db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void ValidateUploadedFile(HttpPostedFileBase httpPostedFileBase)
+        {
+            if (httpPostedFileBase == null)
+            {
+                ModelState.AddModelError(modalErrorKey, "This field is required");
+                return;
+            }
+
+            if (httpPostedFileBase.ContentLength > MvcApplication.MaxRequestLengthInKB*1024)
+            {
+                ModelState.AddModelError(modalErrorKey, "Chosen file is too large.");
+                return;
+            }
+
+            var extension = Path.GetExtension(httpPostedFileBase.FileName);
+            if (extension == null || !_fileAnalyzerClient.SupportedExtensions.Contains(extension.ToLower()))
+            {
+                ModelState.AddModelError(modalErrorKey, "Please choose handled file extension.");
+            }
         }
     }
 }

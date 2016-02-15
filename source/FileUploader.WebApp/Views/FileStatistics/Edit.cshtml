@@ -7,14 +7,14 @@
 <h2>Edit</h2>
 
 
-@using (Html.BeginForm("Edit", "FileStatistics", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Edit", "FileStatistics", FormMethod.Post, new {enctype = "multipart/form-data"}))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
         <h4>FileStatisticsEntity</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <hr/>
+        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
         @Html.HiddenFor(model => model.ID)
 
         <dl class="dl-horizontal">
@@ -28,23 +28,23 @@
                 @Html.Label("New File")
             </dt>
             <dd>
-                <input type="file" id="fileContent" name="upload" />
+                <input type="file" id="fileContent" name="upload"/>
             </dd>
         </dl>
 
-            <div class="form-group">
-               
-                <div class="input-validation-error">
-                    @Html.ValidationMessage("FileUpload")
-                </div>
-            </div>
+        <div class="form-group">
 
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save" class="btn btn-default" />
-                </div>
+            <div class="input-validation-error">
+                @Html.ValidationMessage("FileUpload")
             </div>
-</div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default"/>
+            </div>
+        </div>
+    </div>
 }
 
 <div>

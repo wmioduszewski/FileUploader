@@ -4,10 +4,8 @@ namespace FileUploader.WebApp.Models
 {
     public class FileStatisticsEntity
     {
-
         public FileStatisticsEntity()
         {
-            
         }
 
         public FileStatisticsEntity(FileStatistics fileStatistics)
