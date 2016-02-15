@@ -16,7 +16,7 @@ namespace FileUploader.FileAnalyzer
             _subscribedProcessors = new List<StreamProcessorBase>();
 
             _subscribedProcessors.Add(new TextProcessor());
-            //add another StreamProcessor here
+            //here you can add another StreamProcessor
 
             foreach (var subscribedProcessor in _subscribedProcessors)
             {

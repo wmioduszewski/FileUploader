@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
@@ -119,6 +118,7 @@ namespace FileUploader.WebApp.Controllers
         public ActionResult Edit(
             [Bind(Include = "ID")] FileStatisticsEntity fileStatisticsEntity, HttpPostedFileBase upload)
         {
+            ValidateUploadedFile(upload);
             if (ModelState.IsValid)
             {
                 if (fileStatisticsEntity == null)
@@ -126,12 +126,21 @@ namespace FileUploader.WebApp.Controllers
                     return HttpNotFound();
                 }
 
-                ValidateUploadedFile(upload);
-                var stats = _fileAnalyzerClient.ComputeStatistics(upload);
-                var newFileStatisticsEntity = new FileStatisticsEntity(stats) {ID = fileStatisticsEntity.ID};
-                _db.Entry(newFileStatisticsEntity).State = EntityState.Modified;
-                _db.SaveChanges();
-                return RedirectToAction("Index");
+                if (upload != null && upload.ContentLength > 0)
+                {
+                    try
+                    {
+                        var stats = _fileAnalyzerClient.ComputeStatistics(upload);
+                        var newFileStatisticsEntity = new FileStatisticsEntity(stats) { ID = fileStatisticsEntity.ID };
+                        _db.Entry(newFileStatisticsEntity).State = EntityState.Modified;
+                        _db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError(modalErrorKey, string.Format("Unexpected exception {0}", ex.Message));
+                    }
+                }
             }
             return View();
         }
