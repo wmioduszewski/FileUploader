@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileUploader.FileAnalyzer",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileUploader.FileAnalyzer.UnitTest", "FileUploader.FileAnalyzer.UnitTest\FileUploader.FileAnalyzer.UnitTest.csproj", "{3EE3D984-C78E-4DEE-AA2F-68C76CBA707E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{E16B585C-FE0F-4FB6-8525-9CE7D7A9808E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{424C7D90-0B78-45CE-88B0-D44648E2B428}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{597BC40F-3F96-4975-8EAA-0417B91F3988} = {E16B585C-FE0F-4FB6-8525-9CE7D7A9808E}
+		{363C0676-5FD3-4DED-A7D2-E2226710A6D1} = {E16B585C-FE0F-4FB6-8525-9CE7D7A9808E}
+		{3EE3D984-C78E-4DEE-AA2F-68C76CBA707E} = {424C7D90-0B78-45CE-88B0-D44648E2B428}
 	EndGlobalSection
 EndGlobal
